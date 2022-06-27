@@ -142,4 +142,3 @@ workflows:
           requires: [build-frontend]
       - scan-backend:
           requires: [build-backend]
-      - send-notification
