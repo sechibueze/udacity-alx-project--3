@@ -115,7 +115,12 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-
+  send-notification:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - notify_slack_error
+      - notify_slack_pass
 workflows:
   default:
     jobs:
@@ -129,5 +134,4 @@ workflows:
           requires: [build-frontend]
       - scan-backend:
           requires: [build-backend]
-      - notify_slack_pass
-      - notify_slack_pass
+      - send-notification
