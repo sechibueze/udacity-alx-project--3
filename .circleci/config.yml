@@ -80,6 +80,8 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
+      - notify_slack_pass
+      - notify_slack_error
 
   scan-frontend:
     docker:
