@@ -1,28 +1,20 @@
 version: 2.1
 orbs:
-  slack: circleci/slack@4.10.1
-jobs:
-  notify:
-    docker:
-      - image: 'cimg/base:stable'
+  node: 'circleci/node:4.1'
+  slack: circleci/slack@4.1
+commands:
+  notify_slack_error:
     steps:
       - slack/notify:
-          custom: |
-            {
-              "blocks": [
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "plain_text",
-                      "text": "*Failed Circle CI build*",
-                      "emoji": true
-                    }
-                  ]
-                }
-              ]
-            }
-          event: always
+          event: fail
+          template: basic_fail_1
+
+  notify_slack_pass:
+    steps:
+      - slack/notify:
+          event: pass
+          template: basic_success_1
+jobs:
   build-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -126,10 +118,6 @@ jobs:
           key: backend-build
 
 workflows:
-  send-notification:
-    jobs:
-      - notify:
-          context: slack-secrets
   default:
     jobs:
       - build-frontend
@@ -142,3 +130,5 @@ workflows:
           requires: [build-frontend]
       - scan-backend:
           requires: [build-backend]
+      - notify_slack_pass
+      - notify_slack_pass
