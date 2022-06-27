@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  slack: circleci/slack@4.1
+  slack: circleci/slack@4.3.0
 commands:
   notify_slack_error:
     steps:
@@ -119,8 +119,14 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - notify_slack_error
-      - notify_slack_pass
+      - run: echo 'sending notification...'
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: basic_success_1
+
 workflows:
   default:
     jobs:
