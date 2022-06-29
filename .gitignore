@@ -4,11 +4,12 @@
 *.tmp
 *.tmp.*
 log.txt
+udacity.pem
 *.sublime-project
 *.sublime-workspace
 .vscode/
 npm-debug.log*
-
+secret.md
 .idea/
 .ionic/
 .sourcemaps/
