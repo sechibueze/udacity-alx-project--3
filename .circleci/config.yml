@@ -189,6 +189,33 @@ jobs:
       # Here's where you will add some code to rollback on failure
       - destroy-environment
 
+  configure-infrastructure:
+    docker:
+      # Docker image here that supports Ansible
+      - image: python:3.7-alpine3.11
+    steps:
+      # Checkout code from git
+      - checkout
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+          fingerprints: ['8c:0a:65:ce:50:dd:b4:fc:c3:93:b6:00:9e:5d:9e:df']
+      # attach workspace
+      - run:
+          name: Install dependencies
+          command: |
+            # Your code here
+            apk add --update ansible
+            # exit 1
+      - run:
+          name: Configure server
+          command: |
+            # Your code here
+            cd .circleci/ansible
+            ansible-playbook -i inventory.txt configure-server.yml
+            # exit 1
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment
+
 workflows:
   default:
     jobs:
