@@ -206,6 +206,14 @@ jobs:
             # Your code here
             apk add --update ansible
             # exit 1
+      - attach_workspace:
+          at: project/.circleci/ansible/inventory.txt
+      - run:
+          name: display inventory.txt
+          command: |
+            cd .circleci/ansible
+            ls
+            cat inventory.txt
       - run:
           name: Configure server
           command: |
