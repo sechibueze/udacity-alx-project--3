@@ -179,7 +179,7 @@ jobs:
             # Your code here
             aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            # --filters "Name=tag:Project,Values=udacity" \
+            --filters "Name=tag:Project,Values=udacity" \
             --output text >> .circleci/ansible/inventory.txt
             # exit 1
       - run:
@@ -187,9 +187,9 @@ jobs:
           command: |
             echo .circleci/ansible/inventory.txt
       - persist_to_workspace:
-          root: .
+          root: ~/
           paths:
-            - .circleci/ansible/inventory.txt
+            - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure
       - destroy-environment
 
@@ -211,13 +211,7 @@ jobs:
             apk add --update ansible
             # exit 1
       - attach_workspace:
-          at: ./
-      - run:
-          name: display inventory.txt
-          command: |
-            cd .circleci/ansible
-            ls
-            cat inventory.txt
+          at: ~/project/.circleci/ansible/inventory.txt
       - run:
           name: Configure server
           command: |
