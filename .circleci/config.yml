@@ -182,10 +182,7 @@ jobs:
             --filters "Name=tag:Project,Values=udacity" \
             --output text >> .circleci/ansible/inventory.txt
             # exit 1
-      - run:
-          name: Confirm content of inventory
-          command: |
-            echo .circleci/ansible/inventory.txt
+
       - persist_to_workspace:
           root: ~/
           paths:
@@ -211,7 +208,11 @@ jobs:
             apk add --update ansible
             # exit 1
       - attach_workspace:
-          at: ~/project/.circleci/ansible/inventory.txt
+          at: ~/project
+      - run:
+        name: display inventory
+        command: |
+          cat .circleci/ansible/inventory.txt
       - run:
           name: Configure server
           command: |
