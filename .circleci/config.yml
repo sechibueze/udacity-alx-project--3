@@ -185,7 +185,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/.circleci/ansible/inventory.txt
+            - .circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure
       - destroy-environment
 
@@ -207,7 +207,7 @@ jobs:
             apk add --update ansible
             # exit 1
       - attach_workspace:
-          at: project/.circleci/ansible/inventory.txt
+          at: .circleci/ansible/inventory.txt
       - run:
           name: display inventory.txt
           command: |
