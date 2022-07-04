@@ -183,7 +183,7 @@ jobs:
               --filters "Name=tag:project,Values=udapeople" \
               --output text
             ) 
-            echo  PUB_IP >> .circleci/ansible/inventory.txt
+            echo  $PUB_IP >> .circleci/ansible/inventory.txt
             echo 'saved inventory...'
             cat .circleci/ansible/inventory.txt
             # exit 1
