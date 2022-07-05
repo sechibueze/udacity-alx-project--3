@@ -226,15 +226,17 @@ jobs:
             apk add --update ansible
             # exit 1
       - attach_workspace:
-          at: ~/project
+          at: ~/
       - run:
           name: display inventory
           command: |
+
             cat .circleci/ansible/inventory.txt
       - run:
           name: Configure server
           command: |
             # Your code here
+            ls
             cd .circleci/ansible
             echo 'retrieving inventory...'
             cat inventory.txt
