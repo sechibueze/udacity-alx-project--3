@@ -363,17 +363,19 @@ jobs:
           at: ~/
       - restore_cache:
           keys: [backend-build]
-      - run:
-          name: Install dependencies
-          command: |
-            # your code here
-            cd backend
-            npm i
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       # your code here
+      #       cd backend
+      #       npm i
       - run:
           name: Deploy backend
           command: |
             # your code here
             ls
+            cd backend
+            npm i
             npm run build
             cd ..
             ls
