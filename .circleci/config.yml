@@ -310,8 +310,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - install_nodejs
       - install_aws_cli
+      - install_nodejs
       - restore_cache:
           keys: [frontend-build]
       - run:
@@ -373,8 +373,10 @@ jobs:
           name: Deploy backend
           command: |
             # your code here
+            ls
             npm run build
             cd ..
+            ls
             # Zip the directory
             tar -C backend -czvf artifact.tar.gz .
             cd .circleci/ansible
