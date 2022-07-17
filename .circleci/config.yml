@@ -313,7 +313,7 @@ jobs:
       - revert-migrations
       # Here's where you will add some code to rollback on failure
 
-  deploy-frontend:
+  deploy-frontendx:
     docker:
       # Docker image here that supports AWS CLI
       - image: amazon/aws-cli
@@ -357,6 +357,36 @@ jobs:
       - destroy-environment
       - revert-migrations
 
+  deploy-frontend:
+    docker:
+      - image: python:3.10-alpine3.16
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update nodejs ansible tar npm curl gzip aws-cli
+      - run:
+          name: Get backend url
+          command: |
+            export BACKEND_IP=$(aws ec2 describe-instances \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --filters "Name=tag:project,Values=udapeople" \
+            --output text)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env
+      - run:
+          name: Deploy frontend objects
+          command: |
+            cd frontend
+            npm i
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
@@ -364,8 +394,13 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - install_nodejs
-      - install_ansible
+      # - install_nodejs
+      # - install_ansible
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update nodejs ansible tar npm curl gzip aws-cli
+
       # Add ssh keys with fingerprint
       - add_ssh_keys:
           fingerprints: ['8c:0a:65:ce:50:dd:b4:fc:c3:93:b6:00:9e:5d:9e:df']
@@ -380,22 +415,38 @@ jobs:
       #       # your code here
       #       cd backend
       #       npm i
+      # - run:
+      #     name: Deploy backend
+      #     command: |
+      #       # your code here
+      #       ls
+      #       cd backend
+      #       npm i
+      #       npm run build
+      #       cd ..
+      #       ls
+      #       # Zip the directory
+      #       tar -C backend -czvf artifact.tar.gz .
+      #       cd .circleci/ansible
+      #       echo "Contents  of the inventory.txt file is -------"
+      #       cat inventory.txt
+      #       ansible-playbook -i inventory.txt deploy-backend.yml
+
       - run:
           name: Deploy backend
           command: |
-            # your code here
-            ls
             cd backend
             npm i
             npm run build
             cd ..
-            ls
-            # Zip the directory
             tar -C backend -czvf artifact.tar.gz .
+            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
+
       # Here's where you will add some code to rollback on failure
       - destroy-environment
       - revert-migrations
@@ -424,8 +475,8 @@ workflows:
       # - run-migrations
       - run-migrations:
           requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
+      - deploy-frontend:
+          requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
       # - smoke-test:
