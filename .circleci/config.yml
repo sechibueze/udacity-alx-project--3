@@ -42,6 +42,9 @@ commands:
             aws cloudformation delete-stack --stack-name \
             udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
 
+            aws cloudformation delete-stack --stack-name \
+            udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+
   revert-migrations:
     description: Revert the last migration
     parameters:
@@ -228,14 +231,6 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text >> .circleci/ansible/inventory.txt
             cat .circleci/ansible/inventory.txt
-
-            # echo aws ec2 describe-instances \
-            #   --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            #   --filters "Name=tag:project,Values=udapeople" \
-            #   --output text >> .circleci/ansible/inventory.txt
-            # echo 'saved inventory...'
-            # cat .circleci/ansible/inventory.txt
-            # exit 1
 
       - persist_to_workspace:
           root: ~/
@@ -448,6 +443,7 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
             export API_URL=http://${BACKEND_PUBLIC_IP}:3030
+            echo ${API_URL}
             if curl -s $API_URL/api/status | grep "ok"
             then
               exit 0
