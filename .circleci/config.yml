@@ -389,9 +389,9 @@ jobs:
             else
               echo "----------------No need to clean up-----------------"
             fi
-
       - notify_slack_error
       - notify_slack_pass
+
 workflows:
   default:
     jobs:
