@@ -405,7 +405,7 @@ jobs:
               aws cloudformation delete-stack --stack-name "${OldWorkflowID}"
               aws cloudformation delete-stack --stack-name "${OldWorkflowID}"
             else
-              echo "----------------No need to clean up-----------------"
+              echo "----------------Clean up not necessay-----------------"
             fi
 
       - notify_slack_error
