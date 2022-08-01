@@ -379,8 +379,7 @@ jobs:
           command: |
             # your code here
 
-            # echo <<pipeline.parameters.workflow_id>>
-            # export OldWorkflowID=<<pipeline.parameters.WorkflowID>>
+
 
             export OldWorkflowID=$(aws cloudformation list-exports \
               --query "Exports[?Name==\`WorkflowID\`].Value" --no-paginate --output text)
