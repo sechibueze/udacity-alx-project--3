@@ -2,9 +2,11 @@ URL01: Public Github Repository
     https://github.com/sechibueze/udacity-alx-project--3
 
 URL02: S3 Bucket Frontend
-    http://udapeople-f61f82d.s3-website-us-east-1.amazonaws.com/#/employees
+    http://udapeople-bb0f201.s3-website-us-east-1.amazonaws.com/#/employees
 
 URL03: Cloudfront Distro
-    http://d2nuzy6qllb8zb.cloudfront.net/#/employees
+    http://d3roqyz5h4y6yt.cloudfront.net/#/employees
 
-
+Note:
+SCREENSHOT11-cpu.png for cpu usage
+SCREENSHOT11-free_mem.png for memory usage
